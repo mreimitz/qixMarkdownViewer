@@ -1,0 +1,15 @@
+{
+  "name": "Markdown Viewer",
+  "description": "Renders markdown-formatted text from expressions or static input with full formatting support including headers, tables, code blocks, lists, and more.",
+  "type": "visualization",
+  "version": "1.0.0",
+  "icon": "text",
+  "author": "Manuel Reimitz",
+  "homepage": "",
+  "keywords": "qlik-sense, visualization, markdown, text, formatting",
+  "license": "MIT",
+  "repository": "",
+  "dependencies": {
+    "qlik-sense": ">=3.0.x"
+  }
+}

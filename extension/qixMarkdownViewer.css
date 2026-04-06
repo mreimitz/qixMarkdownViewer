@@ -1,0 +1,186 @@
+/* ============================================================
+   qixMarkdownViewer — Qlik Sense Markdown Extension Styles
+   ============================================================ */
+
+.qix-markdown-viewer {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  line-height: 1.6;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ---- Headings ---- */
+.qix-markdown-viewer h1,
+.qix-markdown-viewer h2,
+.qix-markdown-viewer h3,
+.qix-markdown-viewer h4,
+.qix-markdown-viewer h5,
+.qix-markdown-viewer h6 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.qix-markdown-viewer h1 { font-size: 2em; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.3em; }
+.qix-markdown-viewer h2 { font-size: 1.5em; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.25em; }
+.qix-markdown-viewer h3 { font-size: 1.25em; }
+.qix-markdown-viewer h4 { font-size: 1.1em; }
+.qix-markdown-viewer h5 { font-size: 1em; }
+.qix-markdown-viewer h6 { font-size: 0.9em; color: #666; }
+
+.qix-markdown-viewer h1:first-child,
+.qix-markdown-viewer h2:first-child,
+.qix-markdown-viewer h3:first-child {
+  margin-top: 0;
+}
+
+/* ---- Paragraphs ---- */
+.qix-markdown-viewer p {
+  margin: 0 0 1em 0;
+}
+
+/* ---- Links ---- */
+.qix-markdown-viewer a {
+  color: var(--md-link-color, #0073e6);
+  text-decoration: none;
+}
+
+.qix-markdown-viewer a:hover {
+  text-decoration: underline;
+}
+
+/* ---- Lists ---- */
+.qix-markdown-viewer ul,
+.qix-markdown-viewer ol {
+  margin: 0 0 1em 0;
+  padding-left: 2em;
+}
+
+.qix-markdown-viewer li {
+  margin-bottom: 0.25em;
+}
+
+.qix-markdown-viewer li > ul,
+.qix-markdown-viewer li > ol {
+  margin-top: 0.25em;
+  margin-bottom: 0;
+}
+
+/* Task lists (GFM) */
+.qix-markdown-viewer li input[type="checkbox"] {
+  margin-right: 0.4em;
+  vertical-align: middle;
+}
+
+/* ---- Blockquotes ---- */
+.qix-markdown-viewer blockquote {
+  margin: 0 0 1em 0;
+  padding: 0.5em 1em;
+  border-left: 4px solid #0073e6;
+  background: rgba(0, 115, 230, 0.05);
+  color: inherit;
+}
+
+.qix-markdown-viewer blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- Code ---- */
+.qix-markdown-viewer code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.875em;
+  background: #f4f4f8;
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+}
+
+.qix-markdown-viewer pre {
+  margin: 0 0 1em 0;
+  padding: 1em;
+  background: #f4f4f8;
+  border-radius: 6px;
+  overflow-x: auto;
+  line-height: 1.45;
+}
+
+.qix-markdown-viewer pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.85em;
+}
+
+/* ---- Tables ---- */
+.qix-markdown-viewer table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 0 1em 0;
+  font-size: 0.95em;
+}
+
+.qix-markdown-viewer th,
+.qix-markdown-viewer td {
+  border: 1px solid #ddd;
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+.qix-markdown-viewer th {
+  background: #f4f4f8;
+  font-weight: 600;
+}
+
+.qix-markdown-viewer tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* ---- Horizontal Rule ---- */
+.qix-markdown-viewer hr {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 1.5em 0;
+}
+
+/* ---- Images ---- */
+.qix-markdown-viewer img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+/* ---- Strong / Emphasis / Strikethrough ---- */
+.qix-markdown-viewer strong {
+  font-weight: 700;
+}
+
+.qix-markdown-viewer em {
+  font-style: italic;
+}
+
+.qix-markdown-viewer del,
+.qix-markdown-viewer s {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+/* ---- Scrollbar styling ---- */
+.qix-markdown-viewer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.qix-markdown-viewer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.qix-markdown-viewer::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+}
+
+.qix-markdown-viewer::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}

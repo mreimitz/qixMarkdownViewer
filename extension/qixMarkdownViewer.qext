@@ -2,7 +2,7 @@
   "name": "Markdown Viewer",
   "description": "Renders markdown-formatted text from expressions or static input with full formatting support including headers, tables, code blocks, lists, and more.",
   "type": "visualization",
-  "version": "24.0.0",
+  "version": "1.1.0",
   "icon": "text",
   "author": "Manuel Reimitz",
   "homepage": "",

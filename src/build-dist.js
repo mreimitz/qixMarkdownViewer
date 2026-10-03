@@ -6,7 +6,7 @@ const libsCode = fs.readFileSync(path.join(__dirname, '../dist/libs.js'), 'utf8'
 // Build using string concatenation to avoid template literal issues
 // (libs.js contains backticks and ${} expressions that break template literals)
 const PART1 = '/*\n' +
-' * qixMarkdownViewer v3.0.0\n' +
+' * qixMarkdownViewer v1.1.0\n' +
 ' * Markdown Viewer for Qlik Cloud — Theme-aware with WYSIWYG Editor\n' +
 ' * Released under the MIT license.\n' +
 ' */\n' +

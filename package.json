@@ -1,6 +1,6 @@
 {
   "name": "qix-markdown-viewer",
-  "version": "3.0.0",
+  "version": "1.1.0",
   "description": "Qlik Cloud extension that renders markdown-formatted text with dynamic expressions, master item references, and theme-aware styling.",
   "main": "extension/qixMarkdownViewer.js",
   "scripts": {

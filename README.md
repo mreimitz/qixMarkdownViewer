@@ -281,6 +281,15 @@ Click **Open Full Editor** in the property panel to launch the WYSIWYG modal edi
 
 When dragging a master item from the sidebar over the textarea, a blue cursor indicator shows the exact character position where the item will be dropped. The indicator snaps to the character grid for precise placement.
 
+## Copying Content
+
+Right-click the object and choose **Copy content** in the native context menu. The full content is copied — including parts scrolled out of view — with expressions and master items already resolved:
+
+- **Rich text** (rendered HTML) for pasting into Word, Outlook, Teams, and similar tools.
+- **Plain text** as markdown for pasting into editors that don't accept formatting.
+
+A short "Content copied" confirmation appears in the bottom-right corner of the object.
+
 ## Typography and Colors
 
 Configure visual appearance in the **Typography & Colors** section of the property panel:

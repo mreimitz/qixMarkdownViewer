@@ -4,7 +4,7 @@
   "description": "Qlik Cloud extension that renders markdown-formatted text with dynamic expressions, master item references, and theme-aware styling.",
   "main": "extension/qixMarkdownViewer.js",
   "scripts": {
-    "build:libs": "node node_modules/.bin/esbuild src/build-libs.js --bundle --format=iife --outfile=dist/libs.js --minify",
+    "build:libs": "esbuild src/build-libs.js --bundle --format=iife --outfile=dist/libs.js --minify",
     "build:dist": "node src/build-dist.js",
     "build": "npm run build:libs && npm run build:dist",
     "package": "node scripts/package.js"

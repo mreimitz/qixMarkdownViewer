@@ -179,7 +179,9 @@ const supernovaCode = PART1 + libsCode + PART2 + `
     ".qix-media-preview-info{font-size:11px;color:#888;margin-top:4px;}",
     ".qix-media-preview-empty{font-size:13px;color:#999;font-style:italic;}",
     ".qix-media-footer{display:flex;align-items:center;justify-content:flex-end;padding:10px 16px;border-top:1px solid #ccc;background:#fff;flex-shrink:0;gap:8px;}",
-    ".qix-media-empty{padding:40px;text-align:center;color:#999;font-size:13px;font-style:italic;grid-column:1/-1;}"
+    ".qix-media-empty{padding:40px;text-align:center;color:#999;font-size:13px;font-style:italic;grid-column:1/-1;}",
+    // --- Copy confirmation toast ---
+    ".qix-md-copy-toast{position:absolute;right:8px;bottom:8px;z-index:10;padding:4px 10px;border-radius:4px;background:rgba(0,0,0,0.72);color:#fff;font-size:12px;line-height:1.4;pointer-events:none;opacity:1;transition:opacity 0.4s ease;}"
   ].join("\\n");
 
   var cssInjected = false;
@@ -1539,6 +1541,81 @@ const supernovaCode = PART1 + libsCode + PART2 + `
   }
 
   // =====================================================
+  //  Copy content — native context menu action
+  // =====================================================
+
+  // Remember what is currently shown so the context menu can copy all of it,
+  // not just the part visible in the scroll area
+  function renderViewer(element, markdownText, props, theme) {
+    element.innerHTML = buildViewerHTML(markdownText, props, theme);
+    applyLinksTarget(element);
+    element.__qixMdContent = markdownText || "";
+  }
+
+  // Fallback for browsers without the async clipboard API (or when it is denied)
+  function copyWithSelection(html, text) {
+    var holder = document.createElement("div");
+    holder.setAttribute("contenteditable", "true");
+    holder.style.cssText = "position:fixed;left:-9999px;top:0;opacity:0;white-space:pre-wrap;";
+    holder.innerHTML = html;
+    document.body.appendChild(holder);
+    var onCopy = function(e) {
+      if (!e.clipboardData) return;
+      e.clipboardData.setData("text/html", html);
+      e.clipboardData.setData("text/plain", text);
+      e.preventDefault();
+    };
+    document.addEventListener("copy", onCopy);
+    var ok = false;
+    try {
+      var range = document.createRange();
+      range.selectNodeContents(holder);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      ok = document.execCommand("copy");
+      sel.removeAllRanges();
+    } catch (e) {
+      ok = false;
+    }
+    document.removeEventListener("copy", onCopy);
+    document.body.removeChild(holder);
+    return ok;
+  }
+
+  // Copies the full content: rendered HTML (keeps formatting when pasted into
+  // Word, Outlook, Teams, ...) plus the resolved markdown as plain text
+  function copyContent(element) {
+    var text = element.__qixMdContent || "";
+    var viewer = element.querySelector(".qix-markdown-viewer");
+    var html = viewer ? viewer.innerHTML : "";
+    if (!text && !html) return Promise.resolve(false);
+
+    if (navigator.clipboard && navigator.clipboard.write && typeof ClipboardItem !== "undefined") {
+      return navigator.clipboard.write([new ClipboardItem({
+        "text/html": new Blob([html], { type: "text/html" }),
+        "text/plain": new Blob([text], { type: "text/plain" })
+      })]).then(function() { return true; }, function() {
+        return copyWithSelection(html, text);
+      });
+    }
+    return Promise.resolve(copyWithSelection(html, text));
+  }
+
+  // Small, unobtrusive confirmation in the corner of the object
+  function showCopyToast(element, ok) {
+    var old = element.querySelector(".qix-md-copy-toast");
+    if (old) old.parentNode.removeChild(old);
+    var toast = document.createElement("div");
+    toast.className = "qix-md-copy-toast";
+    toast.textContent = ok ? "Content copied" : "Copy failed";
+    if (window.getComputedStyle(element).position === "static") element.style.position = "relative";
+    element.appendChild(toast);
+    setTimeout(function() { toast.style.opacity = "0"; }, 1200);
+    setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 1600);
+  }
+
+  // =====================================================
   //  Supernova factory — Viewer Component
   // =====================================================
   return function (env) {
@@ -1579,6 +1656,21 @@ const supernovaCode = PART1 + libsCode + PART2 + `
         var theme = stardust.useTheme();
         // Try to get app from stardust hook or from stored ref
         var app = (stardust.useApp ? stardust.useApp() : null) || _appRef;
+
+        // Add "Copy content" to the native right-click menu of the object
+        if (stardust.onContextMenu) {
+          stardust.onContextMenu(function(menu) {
+            if (!menu || typeof menu.addItem !== "function") return;
+            menu.addItem({
+              translation: "Copy content",
+              tid: "qixmd-copy-content",
+              icon: "lui-icon lui-icon--copy",
+              select: function() {
+                copyContent(element).then(function(ok) { showCopyToast(element, ok); });
+              }
+            });
+          });
+        }
 
         try {
           injectCSS();
@@ -1621,8 +1713,7 @@ const supernovaCode = PART1 + libsCode + PART2 + `
             if (quickExprs.length > 0) {
               quickResolved = resolveExpressions(quickResolved, _exprCache);
             }
-            element.innerHTML = buildViewerHTML(quickResolved, props, theme);
-            applyLinksTarget(element);
+            renderViewer(element, quickResolved, props, theme);
 
             // Load master items (cached after first load), then evaluate
             loadMasterItems(app, function(miCache) {
@@ -1634,18 +1725,15 @@ const supernovaCode = PART1 + libsCode + PART2 + `
               if (expressions.length > 0) {
                 evaluateExpressions(app, expressions, function(cache) {
                   var final = resolveExpressions(resolved, cache);
-                  element.innerHTML = buildViewerHTML(final, props, theme);
-                  applyLinksTarget(element);
+                  renderViewer(element, final, props, theme);
                 });
               } else {
-                element.innerHTML = buildViewerHTML(resolved, props, theme);
-                applyLinksTarget(element);
+                renderViewer(element, resolved, props, theme);
               }
             });
           } else {
             // No expressions — render directly
-            element.innerHTML = buildViewerHTML(markdownText, props, theme);
-            applyLinksTarget(element);
+            renderViewer(element, markdownText, props, theme);
           }
         } catch(renderErr) {
           console.error("[qixMD] RENDER ERROR:", renderErr.message, renderErr.stack);
